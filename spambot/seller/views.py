@@ -1,18 +1,19 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from .schemas import Seller, CreateSeller, SellerView, PartialSeller
+import time
+from .schemas import Seller, CreateSeller, SellerView, PartialSeller, SellerSocial, SellerSocialResponse
 from . import crud
 from spambot.core.models.db_helper import db_helper, get_seller_by_id
 
-router = APIRouter(prefix="/seller", tags=["Sellers"])
+router = APIRouter(prefix="/request", tags=["Send request"])
 
 
-@router.post("/create/", response_model=SellerView)
+@router.post("/create/", response_model=SellerSocialResponse)
 async def create_seller(
-        seller_in: CreateSeller,
+        seller_in: SellerSocial,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    print(seller_in.social_network.telegram_url)
     return await crud.create_seller(session=session, seller_in=seller_in)
 
 

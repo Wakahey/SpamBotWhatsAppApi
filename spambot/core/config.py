@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from fastapi.templating import Jinja2Templates
 
 
 class Setting(BaseSettings):
@@ -6,4 +7,5 @@ class Setting(BaseSettings):
     db_echo: bool = True
 
 
+templates = Jinja2Templates(directory="C:\\PythonPrograms\\SpamBot\\spambot\\templates")
 setting = Setting()

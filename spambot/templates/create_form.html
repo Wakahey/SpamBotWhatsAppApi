@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Форма создания продавца</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        label {
+            background-color: #fff;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            background-color: #fff;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .message {
+            position: fixed;
+            top: 120px; /* Верхний отступ */
+            right: 10px; /* Правый отступ */
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info_message li {
+            max-width: 400px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1 style="margin-top: 100px">Создание нового продавца</h1>
+
+    <form id="createSellerForm">
+        <label for="name">Название организации:</label>
+        <input type="text" id="name" name="name_organization" required>
+
+        <label for="location">Местоположение:</label>
+        <input type="text" id="location" name="location">
+
+        <label for="associativeWords">Ассоциативные слова:</label>
+        <input type="text" id="associativeWords" name="associative_words">
+
+        <label for="customerType">Вид заказчика:</label>
+        <select id="customerType" name="customer_type">
+            <option value="Оптовый">Оптовый</option>
+            <option value="Розничный">Розничный</option>
+            <option value="Разборка">Разборка</option>
+        </select>
+
+        <label for="telegramUrl">Telegram URL:</label>
+        <input type="text" id="telegramUrl" name="telegram_url">
+
+        <label for="vkUrl">VK URL:</label>
+        <input type="text" id="vkUrl" name="vk_url">
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">
+
+        <label for="phoneNumber">Номер телефона:</label>
+        <input type="text" id="phoneNumber" name="phone_number">
+
+        <button type="button" onclick="submitForm()">Создать продавца</button>
+    </form>
+    <div class="message">
+        <div>
+            <div id="errorMessage" style="display: none; color: red;"></div>
+        </div>
+        <div class="message-container" id="messageContainer" style="display: none;">
+            <div id="createdSellerInfo">
+                <h2 style="color: #4caf50">Продавец успешно создан!</h2>
+                <p>Информация о продавце:</p>
+                <ul id="sellerInfoList" class="info_message">
+                    <!-- Информация о созданном продавце будет добавляться сюда динамически -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function submitForm() {
+            const form = document.getElementById('createSellerForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const messageContainer = document.getElementById('messageContainer');
+            const sellerInfoList = document.getElementById('sellerInfoList');
+
+            // Собираем данные из формы в объект
+            const formData = {
+                name_organization: form.elements.name_organization.value,
+                location: form.elements.location.value,
+                associative_words: form.elements.associative_words.value,
+                customer_type: form.elements.customer_type.value,
+                social_network: {
+                    telegram_url: form.elements.telegram_url.value,
+                    vk_url: form.elements.vk_url.value,
+                    email: form.elements.email.value,
+                    phone_number: form.elements.phone_number.value
+                }
+            };
+
+            try {
+                const response = await fetch('/request/create/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  // Устанавливаем заголовок для отправки JSON
+                    },
+                    body: JSON.stringify(formData)  // Преобразуем объект в JSON-строку
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Продавец создан:', data);
+
+
+                    errorMessage.style.display = 'none';
+
+                    messageContainer.style.display = 'block';
+                    sellerInfoList.innerHTML = `
+                        <li><strong>ID:</strong> ${data.id}</li>
+                        <li><strong>Название организации:</strong> ${data.name_organization}</li>
+                        <li><strong>Вид продавца:</strong> ${data.customer_type}</li>
+                        <li><strong>Местоположение:</strong> ${data.location}</li>
+                        <li><strong>Ассоциативные слова:</strong> ${data.associative_words}</li>
+                        <li><strong>Дата добавления:</strong> ${data.date_add}</li>
+                    `;
+                    if (data.social_network) {
+                        // Если да, добавляем информацию о социальных сетях в список
+                        sellerInfoList.innerHTML += `
+                        <li><strong>Telegram URL:</strong> ${data.social_network.telegram_url}</li>
+                        <li><strong>VK URL:</strong> ${data.social_network.vk_url}</li>
+                        <li><strong>Email:</strong> ${data.social_network.email}</li>
+                        <li><strong>Номер телефона:</strong> ${data.social_network.phone_number}</li>
+                    `;
+                    }
+
+                } else {
+                    console.error('Ошибка при создании продавца');
+
+                    messageContainer.style.display = 'none';
+
+                    // Пробуем извлечь детали ошибки из JSON
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.detail && errorData.detail.length > 0) {
+                            // Если есть детали ошибок, показываем имя поля и сообщение
+                            const firstError = errorData.detail[0];
+                            errorMessage.textContent = `Ошибка в поле "${firstError.loc[1]}": ${firstError.msg}`;
+                        } else {
+                            // Иначе, показываем общее сообщение об ошибке
+                            errorMessage.textContent = 'Произошла ошибка. Пожалуйста, попробуйте еще раз.';
+                        }
+                    } catch (error) {
+                        // Если не удается извлечь JSON, используем общее сообщение об ошибке
+                        errorMessage.textContent = 'Произошла ошибка. Пожалуйста, попробуйте еще раз.';
+                    }
+
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Ошибкаа:', error);
+                messageContainer.style.display = 'none';
+
+                // Отобразите общее сообщение об ошибке
+                errorMessage.textContent = `Произошла ошибка: ${error.message}`;
+                errorMessage.style.display = 'block';
+            }
+        }
+    </script>
+{% endblock %}

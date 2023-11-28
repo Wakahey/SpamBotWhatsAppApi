@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Создание продавца</title>
+    <style>
+        body {
+
+            background-color: #D9D9D9;
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Изменено на вертикальное расположение */
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            background-color: #fff;
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        td {
+            word-wrap: break-word;
+            max-width: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <body>
+    {% if customer_type == "all" %}
+        <h1 style="font-size: 45px; letter-spacing: 5px; margin-top: 40px; margin-bottom: -11px">
+            Все продавцы
+        </h1>
+    {% elif customer_type == "Оптовый" %}
+        <h1 style="font-size: 45px; letter-spacing: 5px; margin-top: 40px; margin-bottom: -11px">
+            Оптовые продавцы
+        </h1>
+    {% elif customer_type == "Розничный" %}
+        <h1 style="font-size: 45px; letter-spacing: 5px; margin-top: 40px; margin-bottom: -11px">
+            Розничные продавцы
+        </h1>
+    {% elif customer_type == "Разборка" %}
+        <h1 style="font-size: 45px; letter-spacing: 5px; margin-top: 40px; margin-bottom: -11px">
+            Разборки
+        </h1>
+    {% endif %}
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название организации</th>
+            <th>Вид продавца</th>
+            <th>Местоположение</th>
+            <th>Ассоциативные слова</th>
+            <th>Телеграм</th>
+            <th>ВК</th>
+            <th>Почта</th>
+            <th>Номер телефона</th>
+            <th>Дата добавления</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for elem in data %}
+            <tr>
+                <td>{{ elem.id }}</td>
+                <td>{{ elem.name_organization }}</td>
+                <td>{{ elem.customer_type }}</td>
+                <td>{{ elem.location }}</td>
+                <td>{{ elem.associative_words }}</td>
+                <td>{{ elem.social_network.telegram_url }}</td>
+                <td>{{ elem.social_network.vk_url }}</td>
+                <td>{{ elem.social_network.email }}</td>
+                <td>{{ elem.social_network.phone_number }}</td>
+                <td>{{ elem["date_add"] }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </body>
+{% endblock %}

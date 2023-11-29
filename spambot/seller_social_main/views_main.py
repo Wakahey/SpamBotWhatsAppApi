@@ -9,7 +9,7 @@ from spambot.core.models.seller import WholesaleCustomer
 from spambot.seller.schemas import BaseSeller
 from fastapi.responses import RedirectResponse
 
-route = APIRouter(prefix="/seller", tags=["Sellers"])
+route = APIRouter(prefix="", tags=["Sellers main view"])
 
 
 @route.get("/create/", response_class=HTMLResponse)

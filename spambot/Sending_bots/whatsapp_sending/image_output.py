@@ -6,7 +6,7 @@ from io import BytesIO
 ulr = "http://localhost:3000/api/screenshot?session=default"
 
 
-def main(url):
+def main(url, label, root):
     response = requests.get(url)
     if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
@@ -26,5 +26,5 @@ if __name__ == '__main__':
     label.pack()
     ulr = "http://localhost:3000/api/screenshot?session=default"
     while True:
-        main(ulr)
+        main(ulr, label, root)
         root.after(300)

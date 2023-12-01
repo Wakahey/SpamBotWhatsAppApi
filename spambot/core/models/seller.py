@@ -10,27 +10,19 @@ class WholesaleCustomer(Base):
 
     id = Column(Integer, primary_key=True)
     name_organization = Column(String, nullable=False)
+    type_part = Column(String, nullable=False)
+    specialization = Column(String, default="запчасти")
     location = Column(String, default=None)
-    associative_words = Column(String, default="запчасти")
-    date_add = Column(DateTime, default=datetime.now)
-    customer_type = Column(String)
-
-    social_network: Mapped["SocialNetwork"] = relationship(
-        "SocialNetwork",
-        backref="customer",
-        cascade="all, delete-orphan",
-        lazy="joined"
-    )
-
-
-class SocialNetwork(Base):
-    __tablename__ = "social_network"
-
-    customer_id = Column(
-        Integer, ForeignKey("customer.id"),
-        primary_key=True, nullable=False
-    )
-    telegram_url = Column(String, default=None)
-    vk_url = Column(String, default=None)
+    whatsapp = Column(Integer, default=None)
     email = Column(String, default=None)
-    phone_number = Column(String, default=None)
+    date_add = Column(DateTime, default=datetime.now)
+
+
+class Applications(Base):
+    __tablename__ = "applications"
+    id = Column(Integer, primary_key=True)
+    motorcycle_brand = Column(String, nullable=False)
+    motorcycle_model = Column(String, nullable=False)
+    part_name_or_article = Column(String)
+    additional_info = Column(String)
+    application_type = Column(String)

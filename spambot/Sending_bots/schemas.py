@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field
 
 
 class InputSendingInfo(BaseModel):
-    seller_type: str
-    sending_type: str
-    part_number: str | None
-    email_subject: str = Field(..., min_length=5, max_length=35)
-    email_body: str = Field(..., min_length=15)
+    motorcycle_brand: str = Field(..., )
+    motorcycle_model: str
+    part_name_or_article: str
+    additional_info: str | None
+    application_type: str

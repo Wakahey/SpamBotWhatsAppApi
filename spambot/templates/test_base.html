@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block title %}
+
+    {% endblock %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: flex-start;
+            background-color: #f1f1f1;
+            padding: 10px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+            background-color: #ddd;
+            border: none;
+            margin-right: 10px;
+        }
+
+        input[type=text], textarea, option, select, button[type=submit] {
+            font-size: 16px;
+        }
+
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>{% block header %}Ваш заголовок{% endblock %}</h1>
+</header>
+
+<nav>
+    <a href="{{ url_for('test_all') }}" class="nav-link">Все поставщики</a>
+    <a href="#" class="nav-link">Новая оригинальная</a>
+    <a href="#" class="nav-link">Новая не оригинальная</a>
+    <a href="{{ url_for('test_razborka') }}" class="nav-link">Б/у разборка</a>
+    <a href="#" class="nav-link">Резина</a>
+    <a href="{{ url_for('test_add') }}" class="nav-link">Создание продавца</a>
+    <a style="font-size: 18px; margin-left: auto; color: #178a29" href="{{ url_for('applications_sending') }}"
+       class="nav-link">Заявки</a>
+</nav>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

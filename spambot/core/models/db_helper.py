@@ -11,7 +11,7 @@ from asyncio import current_task
 from fastapi import Path, Depends, HTTPException, status
 from ..config import setting
 from spambot.seller import crud
-from .seller import WholesaleCustomer, SocialNetwork
+from .seller import WholesaleCustomer
 
 
 class DatabaseHelper:
@@ -33,11 +33,6 @@ class DatabaseHelper:
             scopefunc=current_task
         )
         return session
-
-    # async def session_dependency(self) -> AsyncSession:
-    #     async with self.session_factory() as session:
-    #         yield session
-    #         await session.close()
 
     async def scoped_session_dependency(self) -> AsyncSession:
         session = self.get_scoped_session()

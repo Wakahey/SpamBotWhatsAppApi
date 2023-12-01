@@ -66,3 +66,7 @@ def start_docker_container():
     log_thread.join(timeout=5)  # Подождать завершения потока в течение 5 секунд
 
     print("Контейнер остановлен.")
+
+
+if __name__ == '__main__':
+    start_docker_container()

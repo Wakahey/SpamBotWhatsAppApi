@@ -22,16 +22,5 @@ app.include_router(seller_router)
 app.include_router(views_main)
 app.include_router(sending_route)
 
-
-@app.middleware("http_redirect")
-async def redirect_to_home(request, call_next):
-    try:
-        return await call_next(request)
-    except HTTPException as exc:
-        redirect_url = '/view/all'
-        if exc.status_code == 404:
-            return RedirectResponse(url=redirect_url)
-
-
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)

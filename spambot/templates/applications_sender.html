@@ -1,0 +1,93 @@
+{% extends "test_base.html" %}
+
+{% block title %}
+    <title>Заявки к поставщикам</title>
+    <style>
+        .requests-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .request-card {
+            width: 30%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .request-card-header {
+            background-color: #3e8241;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .request-card-body {
+            padding: 20px;
+        }
+
+        .request-details {
+            margin-bottom: 10px;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .request-card {
+                width: 48%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block header %}Заявки к поставщикам{% endblock %}
+
+{% block content %}
+    <div class="requests-container">
+        {% for element in data %}
+            <div class="request-card">
+                <div class="request-card-header">#{{ element.id }}</div>
+                <div class="delete-button" onclick="deleteRequest({{ element.id }})">❌</div>
+                <div class="request-card-body">
+                    <div class="request-details">
+                        <strong>Тип заявки:</strong> {{ element.application_type }}
+                    </div>
+                    <div class="request-details">
+                        <strong>Фирма мотоцикла:</strong> {{ element.motorcycle_brand }}
+                    </div>
+                    <div class="request-details">
+                        <strong>Модель мотоцикла:</strong> {{ element.motorcycle_model }}
+                    </div>
+                    <div class="request-details">
+                        <strong>Номер или название запчасти:</strong> {{ element.part_name_or_article }}
+                    </div>
+                    <div class="request-details">
+                        <a href="/request/details/{{ element.id }}">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function deleteRequest(requestId) {
+            // Реализуйте удаление заявки по запросу к серверу или скрипту JavaScript
+            // Обновите визуальное отображение после успешного удаления
+            const requestCard = document.querySelector(`.request-card[data-request-id="${requestId}"]`);
+            if (requestCard) {
+                requestCard.remove();
+            }
+        }
+    </script>
+{% endblock %}

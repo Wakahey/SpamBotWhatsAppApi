@@ -1,0 +1,61 @@
+{% extends "test_base.html" %}
+
+{% block title %}
+    <title>
+        Таблица
+    </title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+{% endblock %}
+
+{% block header %}Таблица данных о поставщиках{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название организации</th>
+            <th>Вид запчастей</th>
+            <th>Мото специализация</th>
+            <th>Местоположение</th>
+            <th>WhatsApp(номер телефона)</th>
+            <th>Почта</th>
+            <th>Дата добавления</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for elem in data %}
+            <tr>
+                <td>{{ elem.id }}</td>
+                <td>{{ elem.name_organization }}</td>
+                <td>{{ elem.type_part }}</td>
+                <td>{{ elem.specialization }}</td>
+                <td>{{ elem.location }}</td>
+                <td>{{ elem.whatsapp }}</td>
+                <td>{{ elem.email }}</td>
+                <td>{{ elem.date_add }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

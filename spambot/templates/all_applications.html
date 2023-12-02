@@ -5,9 +5,9 @@
     <style>
         .requests-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: space-around;
             padding: 20px;
+            flex-wrap: wrap;
         }
 
         .request-card {
@@ -43,6 +43,12 @@
             cursor: pointer;
         }
 
+        .message-time {
+            font-size: 12px;
+            color: #000000;
+            margin-top: 8px;
+        }
+
         @media only screen and (max-width: 768px) {
             .request-card {
                 width: 48%;
@@ -57,7 +63,11 @@
     <div class="requests-container">
         {% for element in data %}
             <div class="request-card">
-                <div class="request-card-header">#{{ element.id }}</div>
+                <div class="request-card-header">#{{ element.id }}
+                    <div class="message-time">
+                        {{ element.datetime_create }}
+                    </div>
+                </div>
                 <div class="delete-button" onclick="deleteRequest({{ element.id }})">❌</div>
                 <div class="request-card-body">
                     <div class="request-details">
@@ -82,8 +92,6 @@
 
     <script>
         function deleteRequest(requestId) {
-            // Реализуйте удаление заявки по запросу к серверу или скрипту JavaScript
-            // Обновите визуальное отображение после успешного удаления
             const requestCard = document.querySelector(`.request-card[data-request-id="${requestId}"]`);
             if (requestCard) {
                 requestCard.remove();

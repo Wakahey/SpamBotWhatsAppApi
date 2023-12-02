@@ -1,3 +1,5 @@
+from spambot.core.config import logger
+
 import docker
 import keyboard
 import threading
@@ -9,15 +11,16 @@ def read_container_logs(container):
         for line in container.logs(stream=True, follow=True):
             print(line.decode('utf-8').strip())
     except Exception as e:
-        print(f"Ошибка при чтении логов контейнера: {e}")
+        logger.error(f"Ошибка при чтении логов контейнера: {e}")
 
 
 def is_container_running(image_name):
+    client = docker.from_env()
+
     try:
-        client = docker.from_env()
-        container = client.containers.get(image_name)
-        return container.status == 'running'
-    except NotFound:
+        containers = client.containers.list(filters={'ancestor': image_name})
+        return any(container.status == 'running' for container in containers)
+    except docker.errors.NotFound:
         return False
 
 
@@ -36,9 +39,9 @@ def start_docker_container():
 
     # Если образа нет локально, скачиваем его
     if not image_exists:
-        print(f"Образ {image_name} не найден локально. Загрузка образа...")
+        logger.debug(f"Образ {image_name} не найден локально. Загрузка образа...")
         client.images.pull(image_name)
-        print("Образ загружен успешно.")
+        logger.info("Образ загружен успешно.")
 
     container_params = {
         'name': 'whatsapp-http-api',  # имя контейнера
@@ -55,17 +58,17 @@ def start_docker_container():
     log_thread.start()
 
     # Ожидание ввода пользователя
-    print("Для выключения контейнера нажмите клавишу 'Ctrl + Q'.")
+    logger.info("Для выключения контейнера нажмите клавишу 'Ctrl + Q'.")
     keyboard.wait("Ctrl + q")
 
     # Остановка контейнера
-    print("Остановка контейнера...")
+    logger.debug("Остановка контейнера...")
     container.stop()
 
     # Ожидание завершения потока
     log_thread.join(timeout=5)  # Подождать завершения потока в течение 5 секунд
 
-    print("Контейнер остановлен.")
+    logger.debug("Контейнер остановлен.")
 
 
 if __name__ == '__main__':

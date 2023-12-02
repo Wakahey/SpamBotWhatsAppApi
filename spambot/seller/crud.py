@@ -5,10 +5,10 @@ Update
 Delete
 """
 
-from sqlalchemy import select
+from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from spambot.example_templates.schemas import BaseSeller
-from spambot.core.models.seller import WholesaleCustomer, Applications
+from spambot.core.models.seller import WholesaleCustomer, Applications, Association
 from spambot.Sending_bots.schemas import InputSendingInfo
 
 
@@ -41,6 +41,28 @@ async def create_applications(application_info: InputSendingInfo, session: Async
     session.add(application_object)
     await session.commit()
     return application_object
+
+
+async def create_association(application: Applications,
+                             seller_li: list[WholesaleCustomer],
+                             session: AsyncSession):
+    data = []
+    for seller in seller_li:
+        data.append({'applications_id': application.id,
+                     'customer_id': seller.id,
+                     'phone_number': seller.whatsapp
+                     })
+    stmt = insert(Association).values(data)
+    await session.execute(stmt)
+    await session.commit()
+
+
+async def get_association(application_id: int,
+                          session: AsyncSession) -> list[Association]:
+    stmt = select(Association).where(Association.applications_id == application_id)
+    result = await session.execute(stmt)
+    association_all = result.scalars().all()
+    return list(association_all)
 
 
 async def get_sellers_where(session: AsyncSession,

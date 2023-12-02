@@ -1,0 +1,101 @@
+{% extends "test_base.html" %}
+
+{% block title %}
+    <title>Детали заявки</title>
+    <style>
+        .details-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .details-card {
+            width: 30%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .details-card-header {
+            background-color: #3e8241;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .details-card-body {
+            padding: 20px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+        }
+
+        .status-icon {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .green {
+            color: #28a745;
+        }
+
+        .red {
+            color: #dc3545;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .details-card {
+                width: 48%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block header %}Детали заявки №{{ data_title["application_id"] }}.
+    Деталь от {{ data_title["brand"] }}
+    ({{ data_title["model"] }}): {{ data_title["part_name"] }}{% endblock %}
+
+{% block content %}
+    <div class="details-container">
+        {% for element in data %}
+            <div class="details-card">
+                <div class="details-card-header">{{ element.customer.name_organization }}</div>
+                <div class="details-card-body">
+                    <div class="detail-item">
+                        <strong>Имя организации:</strong> {{ element.customer.name_organization }}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Номер телефона:</strong> {{ element.phone_number }}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Номер телефона:</strong> {{ element.customer.specialization }}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Статус ответа:</strong>
+                        {% if element.answered %}
+                            <span class="status-icon green">✅</span>
+                        {% else %}
+                            <span class="status-icon red">❌</span>
+                        {% endif %}
+                    </div>
+                    <a href="/request/details/chat/{{ element.phone_number }}">Открыть чат</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Ваш скрипт здесь, если это необходимо
+    </script>
+{% endblock %}

@@ -41,9 +41,15 @@ async def applications_sending(
 ):
     data = await crud.get_applications(session=session)
 
-    return templates.TemplateResponse("applications_sender.html", context={"request": request,
-                                                                           "data": data})
+    return templates.TemplateResponse("all_applications.html", context={"request": request,
+                                                                        "data": data})
 
+
+@route.get("/image/", response_class=HTMLResponse)
+async def get_image_view(
+        request: Request,
+):
+    return templates.TemplateResponse("get_image_screenshot.html", context={"request": request})
 # @route.get("/view/{customer_type}/", response_class=HTMLResponse)
 # async def get_sellers_customer_type(
 #         request: Request,

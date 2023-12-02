@@ -2,15 +2,15 @@ import requests
 from PIL import Image, ImageTk
 import tkinter as tk
 from io import BytesIO
+from .config import BASE_URL
 
-ulr = "http://localhost:3000/api/screenshot?session=default"
+ulr = f"{BASE_URL}/screenshot?session=default"
 
 
 def main(url, label, root):
     response = requests.get(url)
     if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
-
         tk_image = ImageTk.PhotoImage(image)
 
         label.config(image=tk_image)

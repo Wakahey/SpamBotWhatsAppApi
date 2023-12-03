@@ -40,3 +40,9 @@ class Association(Base):
 
     application = relationship("Applications", back_populates="sellers", lazy="joined")
     customer = relationship("WholesaleCustomer", back_populates="applications", lazy="joined", passive_deletes=True)
+
+
+class ModelMoto(Base):
+    __tablename__ = "model_moto"
+    id = Column(Integer, primary_key=True)
+    model_moto = Column(String, primary_key=True)

@@ -1,4 +1,4 @@
-{% extends "test_base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
     <title>Детали заявки</title>
@@ -6,7 +6,7 @@
         .details-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: space-around;
             padding: 20px;
         }
 
@@ -54,6 +54,14 @@
             color: #007bff;
         }
 
+        .answer-body {
+            max-width: 600px;
+            white-space: nowrap;
+            font-size: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         @media only screen and (max-width: 768px) {
             .details-card {
                 width: 48%;
@@ -62,29 +70,32 @@
     </style>
 {% endblock %}
 
-{% block header %}Детали заявки №{{ data_title["application_id"] }}.
-    Деталь от {{ data_title["brand"] }}
-    ({{ data_title["model"] }}): {{ data_title["part_name"] }}{% endblock %}
+{% block header %}Детали заявки №{{ data[0].application_id }}.
+    Деталь от {{ data[0].specialization }}
+    ({{ data[0].model_name }}): {{ data[0].part_name }}{% endblock %}
 
 {% block content %}
     <div class="details-container">
         {% for element in data %}
             <div class="details-card">
-                <div class="details-card-header">{{ element.customer.name_organization }}</div>
+                <div class="details-card-header">{{ element.name_organization }}</div>
                 <div class="details-card-body">
                     <div class="detail-item">
-                        <strong>Имя организации:</strong> {{ element.customer.name_organization }}
+                        <strong>Имя организации:</strong> {{ element.name_organization }}
                     </div>
                     <div class="detail-item">
                         <strong>Номер телефона:</strong> {{ element.phone_number }}
                     </div>
                     <div class="detail-item">
-                        <strong>Номер телефона:</strong> {{ element.customer.specialization }}
+                        <strong>Специализация:</strong> {{ element.specialization }}
                     </div>
                     <div class="detail-item">
                         <strong>Статус ответа:</strong>
-                        {% if element.answered %}
+                        {% if element.status_answer %}
                             <span class="status-icon green">✅</span>
+                            <div class="answer-body">
+                                <strong>Ответ: </strong>{{ element.status_answer }}
+                            </div>
                         {% else %}
                             <span class="status-icon red">❌</span>
                         {% endif %}

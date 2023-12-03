@@ -5,6 +5,7 @@ from spambot.core.config import logger
 import threading
 from spambot.Sending_bots.whatsapp_sending import requests_whatsapp_api
 from spambot.core.models.seller import WholesaleCustomer, Applications
+from fastapi import HTTPException
 
 
 def start_container():
@@ -21,7 +22,8 @@ def start_container():
                 return True
         else:
             logger.error("Ошибка! Контейнер с внешним API не смог запустится.")
-            raise Exception
+            raise HTTPException(status_code=400,
+                                detail=f"Ошибка! Контейнер с внешним API не смог запустится.")
     else:
         logger.info("Контейнер уже запущен, смотрим сессию")
         if requests_whatsapp_api.start_session():

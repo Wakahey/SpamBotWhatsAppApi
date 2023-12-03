@@ -11,6 +11,12 @@ class BaseSeller(BaseModel):
     whatsapp: str
     email: str
 
+    @validator("whatsapp")
+    def validate_whatsapp(cls, value):
+        if not value.startswith("7") or len(value) != 11 or not value.isdigit():
+            raise ValueError("Некорректный номер WhatsApp. Номер должен начинаться с '7' и иметь 11 цифр.")
+        return value
+
 
 class SellerView(BaseSeller):
     id: int

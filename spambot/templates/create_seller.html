@@ -1,4 +1,4 @@
-{% extends "test_base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
     <title>Форма создания продавца</title>
@@ -54,10 +54,19 @@
         <input type="text" id="name_organization" name="name_organization" required>
 
         <label for="type_part">Вид запчастей:</label>
-        <input type="text" id="type_part" name="type_part" required>
+        <select id="type_part" name="type_part" required>
+            <option value="Разборка">Разборка</option>
+            <option value="Новые оригинальные">Новые оригинальные</option>
+            <option value="Новые не оригинальные">Новые не оригинальные</option>
+            <option value="Резина">Резина</option>
+        </select>
 
         <label for="specialization">Мото специализация:</label>
-        <input type="text" id="specialization" name="specialization">
+        <select id="specialization" name="specialization" required>
+            {% for brand in model_moto %}
+                <option value="{{ brand.model_moto }}">{{ brand.model_moto }}</option>
+            {% endfor %}
+        </select>
 
         <label for="location">Местоположение:</label>
         <input type="text" id="location" name="location">

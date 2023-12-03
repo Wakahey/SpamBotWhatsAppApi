@@ -116,5 +116,18 @@ def get_chat_messages(phone_number):
     return data_message
 
 
+def get_status_last_message_in_chat(datetime_create_application, phone_number):
+    ulr = f"""{BASE_URL}/messages?chatId={phone_number}%40c.us&downloadMedia=false&limit=1&session=default"""
+    logger.info(f"Получаем последнее сообщение с номером {phone_number}")
+    response = requests.get(ulr)
+    data_message = []
+    if response.status_code == 200:
+        json_data = response.json()
+        if json_data[0]["fromMe"] is True:
+            return False
+        elif json_data[0]["fromMe"] is False:
+            return json_data[0]["body"]
+
+
 if __name__ == '__main__':
     sending_message("BMW", "BBC4-000", "fsdfs")

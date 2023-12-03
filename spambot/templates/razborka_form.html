@@ -1,7 +1,7 @@
-{% extends "test_base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
-    <title>Форма рассылки по б/у разборке</title>
+    <title>{{ name }}</title>
     <style>
         form {
             max-width: 600px;
@@ -76,16 +76,15 @@
     </style>
 {% endblock %}
 
-{% block header %}Форма рассылки по б/у разборкам{% endblock %}
+{% block header %}{{ name }}{% endblock %}
 
 {% block content %}
     <form id="usedPartsForm" onsubmit="submitUsedPartsForm(); return false;">
         <label for="motorcycle_brand">Фирма мотоцикла:</label>
         <select id="motorcycle_brand" name="motorcycle_brand" required>
-            <!-- Здесь будут опции с фирмами мотоциклов из базы данных -->
-            <option value="BMW">BMW</option>
-            <option value="yamaha">Yamaha</option>
-            <!-- Добавьте другие опции по необходимости -->
+            {% for brand in model_moto %}
+                <option value="{{ brand.model_moto }}">{{ brand.model_moto }}</option>
+            {% endfor %}
         </select>
 
         <label for="motorcycle_model">Модель мотоцикла:</label>
@@ -97,7 +96,7 @@
         <label for="additional_info">Дополнительная информация:</label>
         <textarea style="width: 100%" id="additional_info" name="additional_info" rows="6" required></textarea>
 
-        <button type="submit">Отправить запрос по б/у разборкам</button>
+        <button type="submit">Отправить запросы</button>
     </form>
 
     <div id="overlay">
@@ -162,6 +161,7 @@
                         showMessage('Произошла ошибка. Пожалуйста, попробуйте еще раз.', true);
                     }
                 }
+
             } catch (error) {
                 console.error('Ошибка:', error);
                 showMessage(`Произошла ошибка: ${error.message}`, true);

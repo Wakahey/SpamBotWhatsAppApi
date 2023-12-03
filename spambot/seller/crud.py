@@ -7,8 +7,8 @@ Delete
 
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
-from spambot.example_templates.schemas import BaseSeller
-from spambot.core.models.seller import WholesaleCustomer, Applications, Association
+from spambot.core.models.schemas import BaseSeller
+from spambot.core.models.seller import WholesaleCustomer, Applications, Association, ModelMoto
 from spambot.Sending_bots.schemas import InputSendingInfo
 
 
@@ -43,6 +43,15 @@ async def create_applications(application_info: InputSendingInfo, session: Async
     return application_object
 
 
+async def delete_application(session: AsyncSession,
+                             application_id: int) -> str:
+    smt = select(Applications).where(Applications.id == application_id)
+    result = await session.execute(smt)
+    application = result.scalar()
+    await session.delete(application)
+    await session.commit()
+
+
 async def create_association(application: Applications,
                              seller_li: list[WholesaleCustomer],
                              session: AsyncSession):
@@ -63,6 +72,13 @@ async def get_association(application_id: int,
     result = await session.execute(stmt)
     association_all = result.scalars().all()
     return list(association_all)
+
+
+async def get_moto_brand(session: AsyncSession) -> list[ModelMoto]:
+    stmt = select(ModelMoto)
+    result = await session.execute(stmt)
+    model_moto = result.scalars().all()
+    return list(model_moto)
 
 
 async def get_sellers_where(session: AsyncSession,

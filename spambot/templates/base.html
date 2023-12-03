@@ -63,10 +63,10 @@
 
 <nav>
     <a href="{{ url_for('test_all') }}" class="nav-link">Все поставщики</a>
-    <a href="#" class="nav-link">Новая оригинальная</a>
-    <a href="#" class="nav-link">Новая не оригинальная</a>
+    <a href="{{ url_for('new_original') }}" class="nav-link">Новая оригинальная</a>
+    <a href="{{ url_for('new_no_original') }}" class="nav-link">Новая не оригинальная</a>
     <a href="{{ url_for('test_razborka') }}" class="nav-link">Б/у разборка</a>
-    <a href="#" class="nav-link">Резина</a>
+    <a href="{{ url_for('tires') }}" class="nav-link">Резина</a>
     <a href="{{ url_for('test_add') }}" class="nav-link">Создание продавца</a>
     <a style="font-size: 18px; margin-left: auto; color: #178a29" href="{{ url_for('applications_sending') }}"
        class="nav-link">Заявки</a>

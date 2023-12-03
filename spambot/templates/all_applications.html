@@ -1,4 +1,4 @@
-{% extends "test_base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
     <title>Заявки к поставщикам</title>
@@ -54,6 +54,31 @@
                 width: 48%;
             }
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-buttons {
+            margin-top: 10px;
+            text-align: center;
+        }
     </style>
 {% endblock %}
 
@@ -62,7 +87,7 @@
 {% block content %}
     <div class="requests-container">
         {% for element in data %}
-            <div class="request-card">
+            <div class="request-card" data-request-id="{{ element.id }}">
                 <div class="request-card-header">#{{ element.id }}
                     <div class="message-time">
                         {{ element.datetime_create }}
@@ -89,12 +114,53 @@
             </div>
         {% endfor %}
     </div>
-
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <p>Вы уверены, что хотите удалить заявку №<span id="modalRecordId"></span>?</p>
+            <div class="modal-buttons">
+                <button onclick="confirmDelete()">Да</button>
+                <button onclick="closeModal()">Нет</button>
+            </div>
+        </div>
+    </div>
     <script>
-        function deleteRequest(requestId) {
-            const requestCard = document.querySelector(`.request-card[data-request-id="${requestId}"]`);
-            if (requestCard) {
-                requestCard.remove();
+        let currentRequestId;
+
+        async function deleteRequest(requestId) {
+            currentRequestId = requestId;
+            openModal();
+        }
+
+        function openModal() {
+            const modal = document.getElementById('confirmationModal');
+            const modalRecordId = document.getElementById('modalRecordId');
+            modalRecordId.textContent = currentRequestId;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('confirmationModal');
+            modal.style.display = 'none';
+        }
+
+        async function confirmDelete() {
+            try {
+                const response = await fetch(`/request/details/delete/${currentRequestId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    const requestCard = document.querySelector(`.request-card[data-request-id="${currentRequestId}"]`);
+                    if (requestCard) {
+                        requestCard.remove();
+                    }
+                } else {
+                    console.error('Ошибка при удалении заявки');
+                }
+
+                closeModal();
+            } catch (error) {
+                console.error('Произошла ошибка:', error);
             }
         }
     </script>

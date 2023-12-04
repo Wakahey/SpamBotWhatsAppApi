@@ -6,7 +6,6 @@ from contextlib import asynccontextmanager
 from core.models.db_helper import db_helper
 from core.models.seller import Base
 from spambot.seller_social_main.views_main import route as views_main
-from spambot.Sending_bots.send_view import router as sending_route
 
 
 @asynccontextmanager
@@ -20,7 +19,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(seller_router)
 app.include_router(views_main)
-app.include_router(sending_route)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)

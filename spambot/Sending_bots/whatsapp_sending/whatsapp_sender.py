@@ -14,7 +14,7 @@ def start_container():
         logger.debug("Контейнер не запущен, попытка запуска")
         start_docker = threading.Thread(target=start_docker_container)
         start_docker.start()
-        time.sleep(4)
+        time.sleep(8)
         if is_container_running(image_name):
             logger.info("Контейнер успешно запущен!")
             time.sleep(1)

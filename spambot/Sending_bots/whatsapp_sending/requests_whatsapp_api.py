@@ -60,7 +60,7 @@ def get_status_sessions():
                 logger.info("Сессия запущена, QR код отсканирован")
                 time.sleep(2)
                 return True
-            time.sleep(2)
+            time.sleep(3)
 
 
 def sending_message(brand, model, space_part, additional_info, phone_number):

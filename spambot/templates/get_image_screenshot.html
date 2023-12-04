@@ -19,7 +19,7 @@
 <body>
 
 <div id="imageContainer">
-    <img id="razborkaImage" src="http://127.0.0.1:8000/request/api/image/" alt="Изображение с другого сайта">
+    <img id="razborkaImage" src="{{ url_for('get_api_image') }}" alt="Изображение с другого сайта">
 </div>
 
 <script>
@@ -28,7 +28,7 @@
         const imageElement = document.getElementById('razborkaImage');
 
         // Обновляем src изображения с новым параметром
-        imageElement.src = `http://127.0.0.1:8000/request/api/image/`;
+        imageElement.src = `{{ url_for('get_api_image') }}`;
 
         // После загрузки изображения
         imageElement.onload = function () {

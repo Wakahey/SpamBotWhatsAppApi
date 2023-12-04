@@ -52,6 +52,15 @@ async def delete_application(session: AsyncSession,
     await session.commit()
 
 
+async def delete_seller(session: AsyncSession,
+                        seller_id: int) -> str:
+    smt = select(WholesaleCustomer).where(WholesaleCustomer.id == seller_id)
+    result = await session.execute(smt)
+    seller = result.scalar()
+    await session.delete(seller)
+    await session.commit()
+
+
 async def create_association(application: Applications,
                              seller_li: list[WholesaleCustomer],
                              session: AsyncSession):

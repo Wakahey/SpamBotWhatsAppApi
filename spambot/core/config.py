@@ -1,3 +1,4 @@
+from spambot.templates.path import folder_path
 from pydantic_settings import BaseSettings
 from fastapi.templating import Jinja2Templates
 import logging
@@ -9,7 +10,7 @@ class Setting(BaseSettings):
     db_echo: bool = True
 
 
-templates = Jinja2Templates(directory="C:\\PythonPrograms\\SpamBot\\spambot\\templates")
+templates = Jinja2Templates(directory=folder_path)
 setting = Setting()
 
 logger = logging.getLogger("logging")

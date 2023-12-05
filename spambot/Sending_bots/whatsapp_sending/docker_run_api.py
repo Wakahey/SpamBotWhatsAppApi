@@ -3,7 +3,7 @@ from spambot.core.config import logger
 import docker
 import keyboard
 import threading
-from docker.errors import NotFound
+from docker.errors import NotFound, DockerException
 
 
 def read_container_logs(container):
@@ -25,7 +25,15 @@ def is_container_running(image_name):
 
 
 def start_docker_container():
+    """
+    Старт докер контейнера с необходимым для работы
+    whatsapp api, для автоматизированного отправления
+    сообщений, запустить можно прям от сюда, снизу есть
+    main
+
+    """
     # Подключение к Docker API
+
     client = docker.from_env()
 
     # Название образа

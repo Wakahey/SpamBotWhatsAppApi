@@ -7,8 +7,12 @@ Delete
 
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
+
 from spambot.core.models.schemas import BaseSeller
-from spambot.core.models.seller import WholesaleCustomer, Applications, Association, ModelMoto
+from spambot.core.models.seller import (WholesaleCustomer,
+                                        Applications,
+                                        Association, ModelMoto, BrandMoto)
 from spambot.Sending_bots.schemas import InputSendingInfo
 
 
@@ -84,10 +88,23 @@ async def get_association(application_id: int,
 
 
 async def get_moto_brand(session: AsyncSession) -> list[ModelMoto]:
-    stmt = select(ModelMoto)
+    stmt = select(BrandMoto)
     result = await session.execute(stmt)
-    model_moto = result.scalars().all()
-    return list(model_moto)
+    brand_moto = result.scalars().all()
+    return list(brand_moto)
+
+
+async def get_moto_model(session: AsyncSession, brand: str):
+    stmt = (select(BrandMoto)
+            .options(joinedload(BrandMoto.models))
+            .where(BrandMoto.name == brand))
+    result = await session.execute(stmt)
+    brand_model = result.scalar()
+    if brand_model is not None:
+        models = [model.model_moto for model in brand_model.models]
+        return {"models": models}
+    else:
+        return {"error": "Моделей у мотоцикла нет"}
 
 
 async def get_sellers_where(session: AsyncSession,
@@ -106,20 +123,3 @@ async def get_sellers_where(session: AsyncSession,
 async def get_seller(session: AsyncSession,
                      seller_id: int) -> WholesaleCustomer | None:
     return await session.get(WholesaleCustomer, seller_id)
-
-# async def update_seller_partial(session: AsyncSession,
-#                                 seller: WholesaleCustomer,
-#                                 seller_update: PartialSeller,
-#                                 partial: bool = True) -> WholesaleCustomer:
-#     for key, value in seller_update.model_dump(exclude_unset=partial).items():
-#         setattr(seller, key, value)
-#     await session.commit()
-#     return seller
-
-# async def delete_seller(session: AsyncSession,
-#                         seller: WholesaleCustomer) -> str:
-#     # smt = delete(WholesaleCustomer).where(WholesaleCustomer.id == seller_id)
-#     # await session.execute(smt)
-#     await session.delete(seller)
-#     await session.commit()
-#     return f"Delete {seller.name_organization} complete"

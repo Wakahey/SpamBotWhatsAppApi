@@ -11,9 +11,10 @@ class WholesaleCustomer(Base):
     id = Column(Integer, primary_key=True)
     name_organization = Column(String, nullable=False)
     type_part = Column(String, nullable=False)
-    specialization = Column(String, default="запчасти")
+    specialization = Column(String, default="запчасти", nullable=False)
     location = Column(String, default=None)
     whatsapp = Column(Integer, default=None)
+    vk_id = Column(Integer, default=None)
     email = Column(String, default=None)
     date_add = Column(DateTime, default=datetime.now)
 
@@ -42,7 +43,18 @@ class Association(Base):
     customer = relationship("WholesaleCustomer", back_populates="applications", lazy="joined", passive_deletes=True)
 
 
+class BrandMoto(Base):
+    __tablename__ = "brand_moto"
+    id = Column(Integer, primary_key=True)
+    name = Column(String, primary_key=True, nullable=False)
+
+    models = relationship("ModelMoto", back_populates="brand")
+
+
 class ModelMoto(Base):
     __tablename__ = "model_moto"
     id = Column(Integer, primary_key=True)
-    model_moto = Column(String, primary_key=True)
+    brand_id = Column(Integer, ForeignKey("brand_moto.id"), nullable=False)
+    model_moto = Column(String, nullable=False)
+
+    brand = relationship("BrandMoto", back_populates="models")

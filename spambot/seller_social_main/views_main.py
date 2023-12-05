@@ -23,9 +23,9 @@ async def test_add(
         request: Request,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    model_moto = await crud.get_moto_brand(session=session)
+    moto_brand = await crud.get_moto_brand(session=session)
     return templates.TemplateResponse("create_seller.html", context={"request": request,
-                                                                     "model_moto": model_moto})
+                                                                     "model_moto": moto_brand})
 
 
 @route.get("/spambot/razborka", response_class=HTMLResponse)
@@ -33,14 +33,13 @@ async def test_razborka(
         request: Request,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    model_moto = await crud.get_moto_brand(session=session)
-    print(model_moto)
+    brand_moto = await crud.get_moto_brand(session=session)
     name = "Форма рассылки по б/у разборкам"
     application_type = "Разборка"
-    return templates.TemplateResponse("razborka_form.html", context={"request": request,
-                                                                     "model_moto": model_moto,
-                                                                     "name": name,
-                                                                     "application_type": application_type})
+    return templates.TemplateResponse("sending_form.html", context={"request": request,
+                                                                    "model_moto": brand_moto,
+                                                                    "name": name,
+                                                                    "application_type": application_type})
 
 
 @route.get("/spambot/new/original", response_class=HTMLResponse)
@@ -48,13 +47,13 @@ async def new_original(
         request: Request,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    model_moto = await crud.get_moto_brand(session=session)
+    brand_moto = await crud.get_moto_brand(session=session)
     name = "Новые оригинальные запчасти"
     application_type = "Новые оригинальные"
-    return templates.TemplateResponse("razborka_form.html", context={"request": request,
-                                                                     "model_moto": model_moto,
-                                                                     "name": name,
-                                                                     "application_type": application_type})
+    return templates.TemplateResponse("sending_form.html", context={"request": request,
+                                                                    "model_moto": brand_moto,
+                                                                    "name": name,
+                                                                    "application_type": application_type})
 
 
 @route.get("/spambot/new/no_orinal", response_class=HTMLResponse)
@@ -62,13 +61,13 @@ async def new_no_original(
         request: Request,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    model_moto = await crud.get_moto_brand(session=session)
+    brand_moto = await crud.get_moto_brand(session=session)
     name = "Новые НЕ оригинальные запчасти"
     application_type = "Новые не оригинальные"
-    return templates.TemplateResponse("razborka_form.html", context={"request": request,
-                                                                     "model_moto": model_moto,
-                                                                     "name": name,
-                                                                     "application_type": application_type})
+    return templates.TemplateResponse("sending_form.html", context={"request": request,
+                                                                    "model_moto": brand_moto,
+                                                                    "name": name,
+                                                                    "application_type": application_type})
 
 
 @route.get("/spambot/tires", response_class=HTMLResponse)
@@ -76,13 +75,13 @@ async def tires(
         request: Request,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    model_moto = await crud.get_moto_brand(session=session)
+    brand_moto = await crud.get_moto_brand(session=session)
     name = "Поставщики резины"
     application_type = "Резина"
-    return templates.TemplateResponse("razborka_form.html", context={"request": request,
-                                                                     "model_moto": model_moto,
-                                                                     "name": name,
-                                                                     "application_type": application_type})
+    return templates.TemplateResponse("sending_form.html", context={"request": request,
+                                                                    "model_moto": brand_moto,
+                                                                    "name": name,
+                                                                    "application_type": application_type})
 
 
 @route.get("/applications/", response_class=HTMLResponse)
@@ -101,22 +100,3 @@ async def get_image_view(
         request: Request,
 ):
     return templates.TemplateResponse("get_image_screenshot.html", context={"request": request})
-# @route.get("/view/{customer_type}/", response_class=HTMLResponse)
-# async def get_sellers_customer_type(
-#         request: Request,
-#         customer_type: str = "all",
-#         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
-# ):
-#     if customer_type == "all":
-#         result = await crud.get_sellers(session=session)
-#     else:
-#         result = await crud.get_sellers_where(session=session, customer_type=customer_type)
-#     return templates.TemplateResponse("all_get_sellers.html", context={"request": request,
-#                                                                        "data": result,
-#                                                                        "customer_type": customer_type})
-
-
-# @route.get("/bot_sending/", response_class=HTMLResponse)
-# async def bot_sending_form(request: Request,
-#                            session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
-#     return templates.TemplateResponse("bot_sending.html", context={"request": request})

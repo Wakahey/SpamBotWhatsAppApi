@@ -14,6 +14,7 @@ from spambot.Sending_bots.whatsapp_sending.config import BASE_URL
 from spambot.Sending_bots.whatsapp_sending.requests_whatsapp_api import (get_chat_messages,
                                                                          get_status_last_message_in_chat)
 from spambot.core.config import logger, templates
+from spambot.Sending_bots.vk_api_sending.api_func import get_info_by_id
 
 router = APIRouter(prefix="/request", tags=["Send request"])
 
@@ -24,6 +25,12 @@ async def create_seller(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await crud.create_seller(session=session, seller_in=seller_in)
+
+
+@router.get("/get_models/{brand}")
+async def get_models_moto(brand: str,
+                          session: AsyncSession = Depends(db_helper.scoped_session_dependency)):
+    return await crud.get_moto_model(session=session, brand=brand)
 
 
 @router.post("/used_parts/")

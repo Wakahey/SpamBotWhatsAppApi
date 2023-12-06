@@ -6,6 +6,7 @@ import threading
 from spambot.Sending_bots.whatsapp_sending import requests_whatsapp_api
 from spambot.core.models.seller import WholesaleCustomer, Applications
 from fastapi import HTTPException
+from spambot.Sending_bots.schemas import InputSendingInfo
 
 
 def start_container():
@@ -36,12 +37,14 @@ def sending_bot(data: Applications, sellers: list[WholesaleCustomer]):
         try:
             requests_whatsapp_api.sending_message(brand=data.motorcycle_brand,
                                                   model=data.motorcycle_model,
+                                                  manufacturing_year=data.manufacturing_year,
+                                                  vin_number=data.vin_number,
                                                   space_part=data.part_name_or_article,
                                                   phone_number=seller.whatsapp,
                                                   additional_info=data.additional_info)
+            association_li.append(seller)
         except Exception as exc:
             logger.error(f"Произошла ошибка с отправкой сообщения {exc}")
-        association_li.append(seller)
         time.sleep(1)
     return association_li
 

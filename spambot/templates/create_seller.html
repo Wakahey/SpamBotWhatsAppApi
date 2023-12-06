@@ -55,6 +55,7 @@
 
     <label for="type_part">Вид запчастей:</label>
     <select id="type_part" name="type_part" required>
+        <option value="" selected disabled hidden>Выберите вид</option>
         <option value="Разборка">Разборка</option>
         <option value="Новые оригинальные">Новые оригинальные</option>
         <option value="Новые не оригинальные">Новые не оригинальные</option>
@@ -63,6 +64,7 @@
 
     <label for="specialization">Мото специализация:</label>
     <select id="specialization" name="specialization" required>
+        <option value="" selected disabled hidden>Выберите мото специализацию</option>
         {% for brand in model_moto %}
         <option value="{{ brand.name }}">{{ brand.name }}</option>
         {% endfor %}

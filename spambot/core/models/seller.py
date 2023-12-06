@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Table
-from sqlalchemy.orm import declarative_base, relationship, Mapped
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import declarative_base, relationship
 from datetime import datetime
 
 Base = declarative_base()
@@ -26,10 +26,14 @@ class Applications(Base):
     id = Column(Integer, primary_key=True)
     motorcycle_brand = Column(String, nullable=False)
     motorcycle_model = Column(String, nullable=False)
+    manufacturing_year = Column(String)
+    vin_number = Column(String)
     part_name_or_article = Column(String)
+    social_network = Column(String)
     additional_info = Column(String)
     application_type = Column(String)
     datetime_create = Column(String, default=datetime.now())
+
     sellers = relationship("Association", back_populates="application", cascade="all, delete-orphan")
 
 
@@ -37,7 +41,6 @@ class Association(Base):
     __tablename__ = "association"
     applications_id = Column(Integer, ForeignKey("applications.id"), primary_key=True)
     customer_id = Column(Integer, ForeignKey("customer.id"), primary_key=True)
-    phone_number = Column(String)
 
     application = relationship("Applications", back_populates="sellers", lazy="joined")
     customer = relationship("WholesaleCustomer", back_populates="applications", lazy="joined", passive_deletes=True)

@@ -63,11 +63,11 @@ def get_status_sessions():
             time.sleep(3)
 
 
-def sending_message(brand, model, space_part, additional_info, phone_number):
+def sending_message(brand, model, manufacturing_year, vin_number, space_part, additional_info, phone_number):
     url = f"{BASE_URL}/sendText"
     data = {
         "chatId": f"{phone_number}@c.us",
-        "text": f"{BASE_MESSAGE.format(brand, model, space_part, additional_info)}",
+        "text": f"{BASE_MESSAGE.format(brand, model, manufacturing_year, vin_number, space_part, additional_info)}",
         "session": "default"
     }
     response = requests.post(url, headers=BASE_HEADERS, data=json.dumps(data))
@@ -100,6 +100,7 @@ def get_chat_messages(phone_number):
     data_message = []
     if response.status_code == 200:
         json_data = response.json()
+        print(json_data)
         for message in json_data:
             if message["fromMe"] is True:
                 data_message.append({"name": "МотоДвиж",
@@ -108,15 +109,14 @@ def get_chat_messages(phone_number):
                                      })
             elif message["fromMe"] is False:
                 data_message.append(
-                    {"name": message["_data"]["notifyName"],
-                     "phone_number": (message["from"])[:11],
+                    {"phone_number": (message["from"])[:11],
                      "body": message["body"],
                      "time": datetime.fromtimestamp(message["timestamp"])
                      })
     return data_message
 
 
-def get_status_last_message_in_chat(datetime_create_application, phone_number):
+def get_status_last_message_in_chat(phone_number):
     ulr = f"""{BASE_URL}/messages?chatId={phone_number}%40c.us&downloadMedia=false&limit=1&session=default"""
     logger.info(f"Получаем последнее сообщение с номером {phone_number}")
     response = requests.get(ulr)
@@ -130,4 +130,5 @@ def get_status_last_message_in_chat(datetime_create_application, phone_number):
 
 
 if __name__ == '__main__':
-    sending_message("BMW", "BBC4-000", "fsdfs")
+    # sending_message("BMW", "BBC4-000", "fsdfs")
+    get_chat_messages(phone_number="79852988273")

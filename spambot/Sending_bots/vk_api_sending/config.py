@@ -2,5 +2,8 @@ TOKEN = "vk1.a.TddkBG9AuFZ1N2UPCfdRTDFfHdW4DMSn_vOdJviAJ75gy2G_8fHf0tgZZDW3WIyyI
 BASE_MESSAGE = """Добрый день, мне нужны запчасти на мотоцикл
 Марка: {}
 Модель: {}
+Год выпуска: {}
+VIN номер: {}
 Запчасть: {}
 {}"""
+COUNT_MESSAGE = 5

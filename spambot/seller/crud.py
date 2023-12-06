@@ -1,9 +1,4 @@
-"""
-Create
-Read
-Update
-Delete
-"""
+# -*- coding: utf-8 -*-
 
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -72,7 +67,6 @@ async def create_association(application: Applications,
     for seller in seller_li:
         data.append({'applications_id': application.id,
                      'customer_id': seller.id,
-                     'phone_number': seller.whatsapp
                      })
     stmt = insert(Association).values(data)
     await session.execute(stmt)
@@ -107,14 +101,20 @@ async def get_moto_model(session: AsyncSession, brand: str):
         return {"error": "Моделей у мотоцикла нет"}
 
 
-async def get_sellers_where(session: AsyncSession,
-                            type_part: WholesaleCustomer.type_part,
-                            specialization: WholesaleCustomer.specialization) \
+async def get_sellers_where(session: AsyncSession, info: InputSendingInfo) \
         -> list[WholesaleCustomer]:
-    stmt = (select(WholesaleCustomer)
-            .where(WholesaleCustomer.type_part == type_part)
-            .where(WholesaleCustomer.specialization == specialization)
-            .order_by(WholesaleCustomer.id))
+    if info.social_network == "WhatsApp":
+        stmt = (select(WholesaleCustomer)
+                .where(WholesaleCustomer.type_part == info.application_type)
+                .where(WholesaleCustomer.specialization == info.motorcycle_brand)
+                .where(WholesaleCustomer.whatsapp.isnot(None))
+                .order_by(WholesaleCustomer.id))
+    elif info.social_network == "Вконтакте":
+        stmt = (select(WholesaleCustomer)
+                .where(WholesaleCustomer.type_part == info.application_type)
+                .where(WholesaleCustomer.specialization == info.motorcycle_brand)
+                .where(WholesaleCustomer.vk_id.isnot(None))
+                .order_by(WholesaleCustomer.id))
     result = await session.execute(stmt)
     seller = result.scalars().all()
     return list(seller)

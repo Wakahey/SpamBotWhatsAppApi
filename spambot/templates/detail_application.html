@@ -1,112 +1,120 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>Детали заявки</title>
-    <style>
-        .details-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 20px;
-        }
+<title>Детали заявки</title>
+<style>
+    .details-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+    }
 
+    .details-card {
+        width: 30%;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .details-card-header {
+        background-color: #3e8241;
+        color: #fff;
+        padding: 10px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .details-card-body {
+        padding: 20px;
+    }
+
+    .detail-item {
+        margin-bottom: 10px;
+    }
+
+    .status-icon {
+        font-size: 20px;
+        margin-right: 5px;
+    }
+
+    .green {
+        color: #28a745;
+    }
+
+    .red {
+        color: #dc3545;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .answer-body {
+        max-width: 600px;
+        white-space: nowrap;
+        font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media only screen and (max-width: 768px) {
         .details-card {
-            width: 30%;
-            margin-bottom: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
+            width: 48%;
         }
-
-        .details-card-header {
-            background-color: #3e8241;
-            color: #fff;
-            padding: 10px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .details-card-body {
-            padding: 20px;
-        }
-
-        .detail-item {
-            margin-bottom: 10px;
-        }
-
-        .status-icon {
-            font-size: 20px;
-            margin-right: 5px;
-        }
-
-        .green {
-            color: #28a745;
-        }
-
-        .red {
-            color: #dc3545;
-        }
-
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .answer-body {
-            max-width: 600px;
-            white-space: nowrap;
-            font-size: 16px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        @media only screen and (max-width: 768px) {
-            .details-card {
-                width: 48%;
-            }
-        }
-    </style>
+    }
+</style>
 {% endblock %}
 
-{% block header %}Детали заявки №{{ data[0].application_id }}.
-    Деталь от {{ data[0].specialization }}
-    ({{ data[0].model_name }}): {{ data[0].part_name }}{% endblock %}
+{% block header %}Детали заявки №{{ application_data.id}}.
+Деталь от {{ application_data.motorcycle_brand }}
+({{ application_data.motorcycle_model }}): {{ application_data.part_name_or_article }}
+| <strong style="color: green">{{application_data.social_network}}</strong>{% endblock %}
 
 {% block content %}
-    <div class="details-container">
-        {% for element in data %}
-            <div class="details-card">
-                <div class="details-card-header">{{ element.name_organization }}</div>
-                <div class="details-card-body">
-                    <div class="detail-item">
-                        <strong>Имя организации:</strong> {{ element.name_organization }}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Номер телефона:</strong> {{ element.phone_number }}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Специализация:</strong> {{ element.specialization }}
-                    </div>
-                    <div class="detail-item">
-                        <strong>Статус ответа:</strong>
-                        {% if element.status_answer %}
-                            <span class="status-icon green">✅</span>
-                            <div class="answer-body">
-                                <strong>Ответ: </strong>{{ element.status_answer }}
-                            </div>
-                        {% else %}
-                            <span class="status-icon red">❌</span>
-                        {% endif %}
-                    </div>
-                    <a href="/request/details/chat/{{ element.phone_number }}">Открыть чат</a>
-                </div>
+<div class="details-container">
+    {% for element in data %}
+    <div class="details-card">
+        <div class="details-card-header">{{ element.name_organization }}</div>
+        <div class="details-card-body">
+            <div class="detail-item">
+                <strong>Имя организации:</strong> {{ element.name_organization }}
             </div>
-        {% endfor %}
+            <div class="detail-item">
+                <strong>Способ связи:</strong>
+                {% if application_data.social_network == "WhatsApp" %}
+                WhatsApp: {{ element.phone_number }}
+                {% elif application_data.social_network == "Вконтакте" %}
+                <a href="https://vk.com/id{{ element.vk_id }}">Вконтакте
+                    (VK ID: {{ element.vk_id }})
+                </a>
+                {% endif %}
+            </div>
+            <div class="detail-item">
+                <strong>Специализация:</strong> {{ element.specialization }}
+            </div>
+            <div class="detail-item">
+                <strong>Статус ответа:</strong>
+                {% if element.status_answer %}
+                <span class="status-icon green">✅</span>
+                <div class="answer-body">
+                    <strong>Ответ: </strong>{{ element.status_answer }}
+                </div>
+                {% else %}
+                <span class="status-icon red">❌</span>
+                {% endif %}
+            </div>
+            {% if application_data.social_network == "WhatsApp" %}
+            <a href="/request/details/chat_whatsapp/{{ element.phone_number }}">Открыть чат</a>
+            {% elif application_data.social_network == "Вконтакте" %}
+            <a href="/request/details/chat_vk/{{ element.vk_id }}">Открыть чат</a>
+            {% endif %}
+        </div>
     </div>
-
-    <script>
-        // Ваш скрипт здесь, если это необходимо
-    </script>
+    {% endfor %}
+</div>
 {% endblock %}

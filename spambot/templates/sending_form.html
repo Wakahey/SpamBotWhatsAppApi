@@ -88,6 +88,7 @@
                     style="width: 100%;"
                     required
                     onchange="loadModels()">
+                <option value="" selected disabled hidden>Выберите фирму</option>
                 {% for brand in model_moto %}
                 <option value="{{ brand.name }}">{{ brand.name }}</option>
                 {% endfor %}
@@ -98,6 +99,7 @@
             <select id="motorcycle_model" name="motorcycle_model" class="js-example-basic-single"
                     style="width: 100%;"
                     required>
+                <option value="" selected disabled hidden>Выберите модель</option>
 
             </select>
         </div>
@@ -114,8 +116,20 @@
         </div>
     </div>
 
-    <label for="part_name_or_article">Артикул или название запчасти:</label>
-    <input type="text" id="part_name_or_article" name="part_name_or_article" required>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="part_name_or_article">Артикул или название запчасти:</label>
+            <input type="text" id="part_name_or_article" name="part_name_or_article" required>
+        </div>
+        <div class="col-md-6">
+            <label for="social_network">В какой мессенджер отправляем?:</label>
+            <select name="social_network" id="social_network">
+                <option value="" selected disabled hidden>Выберите мессенджер</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Вконтакте">Вконтакте</option>
+            </select>
+        </div>
+    </div>
 
     <label for="additional_info">Дополнительная информация:</label>
     <textarea style="width: 100%" id="additional_info" name="additional_info" rows="3"></textarea>
@@ -180,7 +194,10 @@
         const formData = {
             motorcycle_brand: form.elements.motorcycle_brand.value,
             motorcycle_model: form.elements.motorcycle_model.value,
+            manufacturing_year: form.elements.manufacturing_year.value,
+            vin_number: form.elements.vin_number.value,
             part_name_or_article: form.elements.part_name_or_article.value,
+            social_network: form.elements.social_network.value,
             additional_info: form.elements.additional_info.value,
             application_type: "{{application_type}}",
         };

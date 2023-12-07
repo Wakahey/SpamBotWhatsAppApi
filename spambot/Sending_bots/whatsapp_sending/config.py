@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 BASE_URL = "http://localhost:3000/api"
 
 BASE_HEADERS = {

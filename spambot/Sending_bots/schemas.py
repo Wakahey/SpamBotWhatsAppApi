@@ -1,5 +1,7 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from datetime import datetime
+from enum import Enum
+from fastapi.exceptions import HTTPException
 
 
 class InputSendingInfo(BaseModel):
@@ -8,9 +10,16 @@ class InputSendingInfo(BaseModel):
     manufacturing_year: str
     vin_number: str
     part_name_or_article: str
-    social_network: str = Field(..., )
+    social_network: str = Field(...)
     additional_info: str | None
     application_type: str
+
+    @validator("social_network")
+    def validate_social_network(cls, value):
+        valid_social_networks = {"Вконтакте", "WhatsApp"}
+        if value not in valid_social_networks:
+            raise HTTPException(status_code=400, detail="Выберите в какой мессенджер будем отправлять")
+        return value
 
 
 class ViewGetDetailApplicationInfo:

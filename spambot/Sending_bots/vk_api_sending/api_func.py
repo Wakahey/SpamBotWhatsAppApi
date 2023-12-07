@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 
 import vk_api
@@ -6,6 +7,7 @@ from spambot.core.config import logger
 from spambot.Sending_bots.schemas import InputSendingInfo
 from spambot.core.models.seller import WholesaleCustomer
 from datetime import datetime
+from fastapi.exceptions import HTTPException
 
 
 def authorization_token():
@@ -15,8 +17,12 @@ def authorization_token():
 
 
 def get_my_information(vk_func):
-    user_info = vk_func.users.get()
-    return int(user_info[0]["id"]), " ".join([user_info[0]["first_name"], user_info[0]["last_name"]])
+    try:
+        user_info = vk_func.users.get()
+        return int(user_info[0]["id"]), " ".join([user_info[0]["first_name"], user_info[0]["last_name"]])
+    except vk_api.exceptions.ApiError as exc:
+        raise HTTPException(status_code=404, detail="Проблема с Вконтакте (возможно ввёден не верный токен, или "
+                                                    "сайт не работает, или ещё что-нибудь). Сообщите айтишнику!.")
 
 
 def get_status_last_vk_messages(vk_id, vk_func=authorization_token()):

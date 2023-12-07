@@ -1,5 +1,4 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI
 import uvicorn
 from seller.views import router as seller_router
 from contextlib import asynccontextmanager

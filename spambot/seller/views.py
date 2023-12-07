@@ -45,11 +45,13 @@ async def input_info(
     Функция рассылки в whatsapp и вконтакте
 
     """
+    for i in info:
+        print(i)
+    sellers = await crud.get_sellers_where(session=session, info=info)
+    if not sellers:
+        raise HTTPException(status_code=400,
+                            detail=f"Не найдены поставщики с фирмой мотоцикла {info.motorcycle_brand}")
     if info.social_network == "WhatsApp":
-        sellers = await crud.get_sellers_where(session=session, info=info)
-        if not sellers:
-            raise HTTPException(status_code=400,
-                                detail=f"Не найдены поставщики с фирмой мотоцикла {info.motorcycle_brand}")
 
         for seller in sellers:
             logger.info(f"(Проверка){seller.name_organization}")
@@ -61,10 +63,7 @@ async def input_info(
                                                            seller_li=seller_li,
                                                            session=session)
     elif info.social_network == "Вконтакте":
-        sellers = await crud.get_sellers_where(session=session, info=info)
-        if not sellers:
-            raise HTTPException(status_code=400,
-                                detail=f"Не найдены поставщики с фирмой мотоцикла {info.motorcycle_brand}")
+
         for seller in sellers:
             logger.info(f"(Проверка){seller.name_organization}")
         logger.debug("Запускаем рассылку Вконтакте")

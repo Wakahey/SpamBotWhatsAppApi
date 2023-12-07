@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from fastapi import APIRouter, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from spambot.core.config import templates

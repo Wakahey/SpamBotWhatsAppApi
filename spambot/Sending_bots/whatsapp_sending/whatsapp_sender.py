@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from spambot.Sending_bots.whatsapp_sending.docker_run_api import (is_container_running,
                                                                   start_docker_container)
 import time
@@ -6,7 +7,6 @@ import threading
 from spambot.Sending_bots.whatsapp_sending import requests_whatsapp_api
 from spambot.core.models.seller import WholesaleCustomer, Applications
 from fastapi import HTTPException
-from spambot.Sending_bots.schemas import InputSendingInfo
 
 
 def start_container():

@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 from spambot.core.config import logger
-
+from fastapi.exceptions import HTTPException
 import docker
 import keyboard
 import threading
@@ -15,7 +16,12 @@ def read_container_logs(container):
 
 
 def is_container_running(image_name):
-    client = docker.from_env()
+    try:
+        client = docker.from_env()
+    except docker.errors.DockerException as exc:
+        raise HTTPException(status_code=404, detail="Проблемы со сторонним приложением WhatsApp, сообщите айтишнику\n"
+                                                    "(Docker контейнер не хочет запускаться, попробуйте запустить "
+                                                    "вручную).")
 
     try:
         containers = client.containers.list(filters={'ancestor': image_name})

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import time
 from spambot.Sending_bots.whatsapp_sending.config import BASE_URL, BASE_HEADERS, BASE_MESSAGE, LIMIT_MESSAGE
@@ -127,8 +128,3 @@ def get_status_last_message_in_chat(phone_number):
             return False
         elif json_data[0]["fromMe"] is False:
             return json_data[0]["body"]
-
-
-if __name__ == '__main__':
-    # sending_message("BMW", "BBC4-000", "fsdfs")
-    get_chat_messages(phone_number="79852988273")

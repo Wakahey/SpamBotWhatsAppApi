@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 
 {% block title %}
 <title>Форма создания продавца</title>
@@ -50,40 +50,13 @@
 
 {% block content %}
 <form id="createSellerForm" onsubmit="submitForm(); return false;">
-    <label for="name_organization">Название организации:</label>
-    <input type="text" id="name_organization" name="name_organization" required>
+    <label for="moto_brand">Имя бренда:</label>
+    <input type="text" id="moto_brand" name="moto_brand" required>
 
-    <label for="type_part">Вид запчастей:</label>
-    <select id="type_part" name="type_part" required>
-        <option value="" selected disabled hidden>Выберите вид</option>
-        <option value="Разборка">Разборка</option>
-        <option value="Новые оригинальные">Новые оригинальные</option>
-        <option value="Новые не оригинальные">Новые не оригинальные</option>
-        <option value="Резина">Резина</option>
-    </select>
+    <label for="moto_name">Имя модели:</label>
+    <input type="text" id="moto_name" name="moto_name" required>
 
-    <label for="specialization">Мото специализация:</label>
-    <select id="specialization" name="specialization" required>
-        <option value="" selected disabled hidden>Выберите мото специализацию</option>
-        {% for brand in model_moto %}
-        <option value="{{ brand.name }}">{{ brand.name }}</option>
-        {% endfor %}
-    </select>
-
-    <label for="location">Местоположение:</label>
-    <input type="text" id="location" name="location">
-
-    <label for="whatsapp">WhatsApp(номер телефона):</label>
-    <input type="tel" id="whatsapp" name="whatsapp">
-
-    <label for="vk_id">ID Вконтакте:</label>
-    <input type="tel" id="vk_id" name="vk_id">
-
-    <label for="email">Почта:</label>
-    <input type="text" id="email" name="email">
-
-    <button type="submit">Создать продавца</button>
-
+    <button type="submit">Создать мотоцикл</button>
 </form>
 <div id="messageContainer"></div>
 <script>

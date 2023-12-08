@@ -1,154 +1,149 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>Таблица</title>
-    <style>
-        /* Ваш стиль таблицы */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+<title>Таблица</title>
+<style>
+    /* Ваш стиль таблицы */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100px;
-        }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100px;
+    }
 
-        th {
-            background-color: #f2f2f2;
-        }
+    th {
+        background-color: #f2f2f2;
+    }
 
-        /* Новый стиль для модального окна */
-        #confirmationModal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: white;
-            z-index: 1000;
-        }
+    /* Новый стиль для модального окна */
+    #confirmationModal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: white;
+        z-index: 1000;
+    }
 
-        #modalBackground {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
+    #modalBackground {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
 
-        /* Стиль для кнопок в модальном окне */
-        #confirmationModal button {
-            padding: 15px; /* Увеличьте высоту кнопок */
-            margin: 5px;
-            font-size: 16px;
-            width: 100px; /* Добавьте ширину кнопок */
-            display: inline-block; /* Разместите кнопки в строку */
+    /* Стиль для кнопок в модальном окне */
+    #confirmationModal button {
+        padding: 15px; /* Увеличьте высоту кнопок */
+        margin: 5px;
+        font-size: 16px;
+        width: 100px; /* Добавьте ширину кнопок */
+        display: inline-block; /* Разместите кнопки в строку */
 
-        }
-    </style>
-    <script>
-        let currentSellerIdToDelete;
+    }
+</style>
+<script>
+    let currentSellerIdToDelete;
 
-        function confirmDelete(sellerId) {
-            currentSellerIdToDelete = sellerId;
-            // Устанавливаем значение modalRecordId перед открытием модального окна
-            document.getElementById('modalRecordId').textContent = sellerId;
-            openModal();
-        }
+    function confirmDelete(sellerId) {
+        currentSellerIdToDelete = sellerId;
+        // Устанавливаем значение modalRecordId перед открытием модального окна
+        document.getElementById('modalRecordId').textContent = sellerId;
+        openModal();
+    }
 
-        function openModal() {
-            const modal = document.getElementById('confirmationModal');
-            const modalBackground = document.getElementById('modalBackground');
-            modal.style.display = 'block';
-            modalBackground.style.display = 'block';
-        }
+    function openModal() {
+        const modal = document.getElementById('confirmationModal');
+        const modalBackground = document.getElementById('modalBackground');
+        modal.style.display = 'block';
+        modalBackground.style.display = 'block';
+    }
 
-        function closeModal() {
-            const modal = document.getElementById('confirmationModal');
-            const modalBackground = document.getElementById('modalBackground');
-            modal.style.display = 'none';
-            modalBackground.style.display = 'none';
-        }
+    function closeModal() {
+        const modal = document.getElementById('confirmationModal');
+        const modalBackground = document.getElementById('modalBackground');
+        modal.style.display = 'none';
+        modalBackground.style.display = 'none';
+    }
 
-        async function deleteSeller() {
-            try {
-                const response = await fetch(`/request/seller/delete/${currentSellerIdToDelete}`, {
-                    method: 'DELETE',
-                });
+    async function deleteSeller() {
+        try {
+            const response = await fetch(`/request/seller/delete/${currentSellerIdToDelete}`, {
+                method: 'DELETE',
+            });
 
-                if (response.ok) {
-                    // Успешное удаление на сервере
+            if (response.ok) {
+                // Успешное удаление на сервере
 
-                    // Обновление таблицы (пример: удаление строки)
-                    const sellerRow = document.querySelector(`#sellerRow${currentSellerIdToDelete}`);
-                    if (sellerRow) {
-                        sellerRow.remove();
-                    }
-                } else {
-                    console.error('Ошибка при удалении поставщика');
+                // Обновление таблицы (пример: удаление строки)
+                const sellerRow = document.querySelector(`#sellerRow${currentSellerIdToDelete}`);
+                if (sellerRow) {
+                    sellerRow.remove();
                 }
-
-                closeModal();
-            } catch (error) {
-                console.error('Произошла ошибка:', error);
+            } else {
+                console.error('Ошибка при удалении поставщика');
             }
+
+            closeModal();
+        } catch (error) {
+            console.error('Произошла ошибка:', error);
         }
-    </script>
+    }
+</script>
 {% endblock %}
 
 {% block header %}Таблица данных о поставщиках{% endblock %}
 
 {% block content %}
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Название организации</th>
-            <th>Вид запчастей</th>
-            <th>Мото специализация</th>
-            <th>Местоположение</th>
-            <th>WhatsApp(номер телефона)</th>
-            <th>VK id</th>
-            <th>Почта</th>
-            <th style="width: 100px">Действия</th>  <!-- Новый столбец для кнопок действий -->
-        </tr>
-        </thead>
-        <tbody>
-        {% for elem in data %}
-            <tr id="sellerRow{{ elem.id }}">
-                <td>{{ elem.id }}</td>
-                <td>{{ elem.name_organization }}</td>
-                <td>{{ elem.type_part }}</td>
-                <td>{{ elem.specialization }}</td>
-                <td>{{ elem.location }}</td>
-                <td>{{ elem.whatsapp }}</td>
-                <td>{{ elem.vk_id }}</td>
-                <td>{{ elem.email }}</td>
-                <td>
-                    <!-- Добавляем кнопку удаления с вызовом функции confirmDelete -->
-                    <button onclick="confirmDelete({{ elem.id }})">❌Удалить</button>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название организации</th>
+        <th>Вид запчастей</th>
+        <th>Мото специализация</th>
+        <th>Местоположение</th>
+        <th>WhatsApp(номер телефона)</th>
+        <th>VK id</th>
+        <th>Почта</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for elem in data %}
+    <tr id="sellerRow{{ elem.id }}">
+        <td>{{ elem.id }}</td>
+        <td>{{ elem.name_organization }}</td>
+        <td>{{ elem.type_part }}</td>
+        <td>{{ elem.specialization }}</td>
+        <td>{{ elem.location }}</td>
+        <td>{{ elem.whatsapp }}</td>
+        <td>{{ elem.vk_id }}</td>
+        <td>{{ elem.email }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
-    <!-- Модальное окно с подтверждением удаления -->
-    <div id="modalBackground"></div>
-    <div id="confirmationModal">
-        <p>Вы уверены, что хотите удалить поставщика с ID: <span id="modalRecordId"></span>?</p>
-        <button onclick="deleteSeller()">Да</button>
-        <button onclick="closeModal()">Нет</button>
-    </div>
+<!-- Модальное окно с подтверждением удаления -->
+<div id="modalBackground"></div>
+<div id="confirmationModal">
+    <p>Вы уверены, что хотите удалить поставщика с ID: <span id="modalRecordId"></span>?</p>
+    <button onclick="deleteSeller()">Да</button>
+    <button onclick="closeModal()">Нет</button>
+</div>
 {% endblock %}

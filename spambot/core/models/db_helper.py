@@ -15,6 +15,10 @@ from spambot.core.models.seller import WholesaleCustomer
 
 
 class DatabaseHelper:
+    """
+    Session factory(Создаёт сессии для подключения к базе данных)
+    """
+
     def __init__(self, url: str, echo: bool = False):
         self.engine = create_async_engine(
             url=url,

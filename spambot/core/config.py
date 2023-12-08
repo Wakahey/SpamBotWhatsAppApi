@@ -14,14 +14,8 @@ templates = Jinja2Templates(directory=folder_path)
 setting = Setting()
 
 logger = logging.getLogger("logging")
-
-# Устанавливаем уровень логирования (например, INFO)
 logger.setLevel(logging.DEBUG)
-
-# Создайте консольный обработчик
 console_handler = logging.StreamHandler()
-
-# Используйте ColoredFormatter для цветного форматирования
 formatter = ColoredFormatter(
     "%(log_color)s%(levelname)-8s%(reset)s %(message)s",
     datefmt=None,
@@ -36,9 +30,5 @@ formatter = ColoredFormatter(
     secondary_log_colors={},
     style='%'
 )
-
-# Установите форматтер для обработчика
 console_handler.setFormatter(formatter)
-
-# Добавьте обработчик к логгеру
 logger.addHandler(console_handler)

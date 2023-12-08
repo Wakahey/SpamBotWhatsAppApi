@@ -1,0 +1,170 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+<title>Форма создания продавца</title>
+<style>
+    form {
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #messageContainer {
+        display: none;
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+    }
+
+    @media only screen and (max-width: 600px) {
+        input, select {
+            width: calc(100% - 16px);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block header %}Форма создания продавца{% endblock %}
+
+{% block content %}
+<form id="createSellerForm" onsubmit="submitForm(); return false;">
+    <label for="name_organization">Название организации:</label>
+    <input type="text" id="name_organization" name="name_organization" required>
+
+    <label for="type_part">Вид запчастей:</label>
+    <select id="type_part" name="type_part" required>
+        <option value="" selected disabled hidden>Выберите вид</option>
+        <option value="Разборка">Разборка</option>
+        <option value="Новые оригинальные">Новые оригинальные</option>
+        <option value="Новые не оригинальные">Новые не оригинальные</option>
+        <option value="Резина">Резина</option>
+    </select>
+
+    <label for="specialization">Мото специализация:</label>
+    <select id="specialization" name="specialization" required>
+        <option value="" selected disabled hidden>Выберите мото специализацию</option>
+        {% for brand in model_moto %}
+        <option value="{{ brand.name }}">{{ brand.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="location">Местоположение:</label>
+    <input type="text" id="location" name="location">
+
+    <label for="whatsapp">WhatsApp(номер телефона):</label>
+    <input type="tel" id="whatsapp" name="whatsapp">
+
+    <label for="vk_id">ID Вконтакте:</label>
+    <input type="tel" id="vk_id" name="vk_id">
+
+    <label for="email">Почта:</label>
+    <input type="text" id="email" name="email">
+
+    <button type="submit">Создать продавца</button>
+
+</form>
+<div id="messageContainer"></div>
+<script>
+    async function submitForm() {
+        const form = document.getElementById('createSellerForm');
+        const messageContainer = document.getElementById('messageContainer');
+
+        // Собираем данные из формы в объект
+        const formData = {
+            name_organization: form.elements.name_organization.value,
+            type_part: form.elements.type_part.value,
+            specialization: form.elements.specialization.value,
+            location: form.elements.location.value,
+            whatsapp: form.elements.whatsapp.value,
+            vk_id: form.elements.vk_id.value,
+            email: form.elements.email.value,
+        };
+
+        try {
+            const response = await fetch('/request/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Продавец создан:', data);
+
+                // Отображаем все данные о продавце
+                showMessage(`
+                    <strong>ID:</strong> ${data.id}<br>
+                    <strong>Название организации:</strong> ${data.name_organization}<br>
+                    <strong>Вид запчастей:</strong> ${data.type_part}<br>
+                    <strong>Специализация:</strong> ${data.specialization}<br>
+                    <strong>Местоположение:</strong> ${data.location}<br>
+                    <strong>WhatsApp(номер телефона):</strong> ${data.whatsapp}<br>
+                    <strong>VK ID:</strong> ${data.vk_id}<br>
+                    <strong>Почта:</strong> ${data.email}<br>
+                    <strong>Дата добавления:</strong> ${data.date_add}<br>
+                `, false);
+
+            } else {
+                console.error('Ошибка при создании продавца');
+
+                // Пробуем извлечь детали ошибки из JSON
+                try {
+                    const errorData = await response.json();
+                    if (errorData.detail && errorData.detail.length > 0) {
+                        // Если есть детали ошибок, показываем имя поля и сообщение
+                        const firstError = errorData.detail[0];
+                        showMessage(`Ошибка в поле "${firstError.loc[1]}": ${firstError.msg}`, true);
+                    } else {
+                        // Иначе, показываем общее сообщение об ошибке
+                        showMessage('Произошла ошибка. Пожалуйста, попробуйте еще раз.', true);
+                    }
+                } catch (error) {
+                    // Если не удается извлечь JSON, используем общее сообщение об ошибке
+                    showMessage('Произошла ошибка. Пожалуйста, попробуйте еще раз.', true);
+                }
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+
+            // Отображаем общее сообщение об ошибке
+            showMessage(`Произошла ошибка: ${error.message}`, true);
+        }
+    }
+
+    function showMessage(message, isError) {
+        const messageContainer = document.getElementById('messageContainer');
+        messageContainer.innerHTML = message;
+        messageContainer.style.display = 'block';
+
+        if (isError) {
+            messageContainer.style.color = 'red';
+        } else {
+            messageContainer.style.color = 'green';
+        }
+    }
+</script>
+{% endblock %}

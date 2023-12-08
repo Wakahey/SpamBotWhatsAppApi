@@ -19,16 +19,6 @@ async def test_all(
                                                                          "data": result})
 
 
-@route.get("/add/", response_class=HTMLResponse)
-async def test_add(
-        request: Request,
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
-):
-    moto_brand = await crud.get_moto_brand(session=session)
-    return templates.TemplateResponse("create_seller.html", context={"request": request,
-                                                                     "model_moto": moto_brand})
-
-
 @route.get("/spambot/razborka", response_class=HTMLResponse)
 async def test_razborka(
         request: Request,

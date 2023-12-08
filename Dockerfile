@@ -1,17 +1,20 @@
+# Используем официальный образ Python 3.9
+FROM python:3.10.12
 
-FROM python:3.9
-
-
+# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
+# Копируем все содержимое текущего каталога в /app внутри контейнера
+COPY . /app
 
-COPY requirements.txt .
+# Устанавливаем зависимости проекта
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
+# Опционально: устанавливаем переменную среды PYTHONPATH
+ENV PYTHONPATH=/app
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Открываем порт 8000
+EXPOSE 8000
 
-
-COPY . .
-
-
-CMD ["uvicorn", "spambot.main:app", "--host", "0.0.0.0", "--port", "80"]
+# Запускаем приложение
+CMD ["uvicorn", "spambot.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

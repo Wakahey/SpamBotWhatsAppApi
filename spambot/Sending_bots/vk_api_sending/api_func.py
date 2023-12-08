@@ -2,7 +2,7 @@
 import time
 
 import vk_api
-from .config import TOKEN, BASE_MESSAGE, COUNT_MESSAGE
+from spambot.Sending_bots.vk_api_sending.config import TOKEN, BASE_MESSAGE, COUNT_MESSAGE
 from spambot.core.config import logger
 from spambot.Sending_bots.schemas import InputSendingInfo
 from spambot.core.models.seller import WholesaleCustomer

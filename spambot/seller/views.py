@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from spambot.core.models.schemas import SellerView, BaseSeller
-from . import crud
+from spambot.seller import crud
 from spambot.core.models.db_helper import db_helper
 from spambot.Sending_bots.schemas import InputSendingInfo, ViewGetDetailVK, ViewGetDetailWhatsApp
 from spambot.core.models.seller import Association

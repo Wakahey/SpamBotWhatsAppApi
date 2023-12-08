@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
-from seller.views import router as seller_router
+from spambot.seller.views import router as seller_router
 from contextlib import asynccontextmanager
-from core.models.db_helper import db_helper
-from core.models.seller import Base
+from spambot.core.models.db_helper import db_helper
+from spambot.core.models.seller import Base
 from spambot.seller_social_main.views_main import route as views_main
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

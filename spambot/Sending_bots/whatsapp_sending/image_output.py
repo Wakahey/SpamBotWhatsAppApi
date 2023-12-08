@@ -2,7 +2,7 @@ import requests
 from PIL import Image, ImageTk
 import tkinter as tk
 from io import BytesIO
-from .config import BASE_URL
+from spambot.Sending_bots.whatsapp_sending.config import BASE_URL
 
 ulr = f"{BASE_URL}/screenshot?session=default"
 

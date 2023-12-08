@@ -9,9 +9,9 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import sessionmaker
 from asyncio import current_task
 from fastapi import Path, Depends, HTTPException, status
-from ..config import setting
+from spambot.core.config import setting
 from spambot.seller import crud
-from .seller import WholesaleCustomer
+from spambot.core.models.seller import WholesaleCustomer
 
 
 class DatabaseHelper:

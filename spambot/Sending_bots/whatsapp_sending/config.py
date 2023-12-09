@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-BASE_URL = "http://82.97.242.17:3000/api"
+BASE_URL = "http://node_app:3000/api"
 
 BASE_HEADERS = {
     'accept': 'application/json',

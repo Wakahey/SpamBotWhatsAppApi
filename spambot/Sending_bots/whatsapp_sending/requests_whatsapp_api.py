@@ -43,6 +43,7 @@ def start_session():
 def get_status_sessions():
     count = 0
     url = f"{BASE_URL}/sessions?all=true"
+    logger.info(f"Пытаемся обратится к {BASE_URL}/sessions?all=true")
     while True:
         response = requests.get(url)
         if response.status_code == 200:
